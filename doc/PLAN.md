@@ -24,7 +24,7 @@ When the simulation is run it starts by finding SimObjects which has no outputs 
 ### Fields
 - *int* identifier
 - *bool* evaluated
-- *list[tuple]* input_pointers
+- *list[tuple]* input_locations
 - *list[bool]* input_values
 - *list[bool]* output_values
 ### Functions
