@@ -29,10 +29,13 @@ When the simulation is run it starts by finding SimObjects which has no outputs 
 - *list[bool]* output_values
 ### Functions
 - Getters and setters, excluding setter for identifier.
-- *void* add_input(): adds extra input to block.
-- *void* add_output(): adds extra output to block.
+- *void* set_input_location(_input_port_number, _location): sets the entry of the input locations list with id _input_port_number to _location.
+- *void* set_input_value(_input_port_number, _value): sets the entry of the input values list with id _input_port_number to _value.
+- *void* add_input(_new_input_port_number): adds extra input to block at the specified place, using the specified port number, pushing ports after the new port down by one.
+- *void* add_output(_new_output_port_number): adds extra output to block at the specified place, using the specified port number, pushing ports after the new port down by one.
+- *void* connect_input(_input_port_number, _source_id, _source_port_number): connects a specific input to an output port of another block.
 - *int* get_num_inputs(): returns the total number of inputs.
 - *int* get_num_outputs(): returns the total number of outputs.
-- *void* execute_logic(): uses the set input_values to determine its output_values. This function must be overridden by subclasses.
+- *void* execute_logic(time): uses the set input_values to determine its output_values. This function must be overridden by subclasses.
 ## Other classes
 - Other classes inherit fields and functions from the SimObject class. They call the superconstructor with the number of inputs and outputs required and override the execute_logic() function.
