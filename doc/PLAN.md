@@ -33,7 +33,7 @@ This will start recursive calculation of all necessary SimObjects, leaving isola
 - *list[bool]* input_values
 - *list[bool]* output_values
 ### Functions
-- Getters and setters, excluding setter for identifier.
+- Getters and setters, excluding setter for the identifier.
 - *void* set_input_location(_input_port_number, _location): sets the entry of the input locations list with id _input_port_number to _location.
 - *void* set_input_value(_input_port_number, _value): sets the entry of the input values list with id _input_port_number to _value.
 - *void* add_input(_new_input_port_number): adds extra input to block at the specified place, using the specified port number, pushing ports after the new port down by one.
@@ -44,3 +44,14 @@ This will start recursive calculation of all necessary SimObjects, leaving isola
 - *void* execute_logic(_time): uses the list of input values to determine its output values. This function must be overridden by subclasses.
 ## Other classes
 - Other classes inherit fields and functions from the SimObject class. They call the superconstructor with the number of inputs and outputs required and override the execute_logic() function.
+## Simulation
+### Fields
+- *list[SimObject]* objects
+- *float* simulation_time
+- *float* simulation_timestep
+### Functions
+- Getters and setters, excluding setter for the objects list.
+- *bool* add_object(_object): adds an object to the simulation, returns true is the action was successful, else returns false.
+- *bool* remove_object(_object_id): removes an object from the simulation, returns true is the action was successful, else returns false.
+- *void* step(_time): evaluate all objects which no outputs connected.
+- *void* step_object(_object, _time): evaluate _object recursively, called from step().

@@ -62,7 +62,7 @@ class SimObject:
 		"""Returns the number of outputs."""
 		return len(self.get_output_values())
 
-	# Setters.
+	# Setters
 	def set_evaluated(self, _evaluated):
 		"""Sets evaluated boolean."""
 		# Check parameter type.
@@ -152,7 +152,7 @@ class SimObject:
 		# Set output values list.
 		self.output_values = _output_values
 
-	# Other functions.
+	# Other functions
 	def add_input(self, _new_input_port_number):
 		"""Adds an extra input to the block at the specified place, using the 
 		specified port number, pushing ports after the new port down by 
@@ -228,3 +228,6 @@ class SimObject:
 
 		# Reset input value.
 		self.set_input_value(_input_port_number, False)
+
+	def execute_logic(self, _time):
+		pass
