@@ -9,13 +9,18 @@ The application can be used to develop logical circuits, a circuit can be export
 - [ ] Logic gate: Has one or more inputs and one output, executes elementary logic.
 - [ ] Module: Has zero or more inputs and zero or more outputs, executes logic defined by a script.
 - [ ] Subsystem: Has zero or more inputs and zero or more outputs, can contain logic gates, modules and other subsystems, which are internally connected to the inputs and outputs of the subsystem. <br />
-- [ ] Switch: Has zero inputs and one output, can be switched on of off by clicking it with the mouse.
+- [ ] Switch: Has zero inputs and one output, can be switched on or off by clicking it with the mouse.
 - [ ] Lamp: Has one input and one output, provides visual feedback on whether a signal is on or off.
 
-All of these objects will have the same superclass called SimObject. Every SimObject has its own unique identifier. Every SimObject also has a list of tuples containing the output port numbers and the identifiers the inputs of the SimObject are connected to, such a tuple is of the form (*object_identifier*, *output_port_number*). It will also have a list containing the boolean values of those outputs. Every SimObject also has a list of booleans representing the state of the outputs, these will be fetched by other SimObjects when needed. The Simulation class will hold a pool of pointers to all of the objects in the simulation, the Subsystem class will have its own internal pool. <br />
+All of these objects will have the same superclass called SimObject. Every SimObject has its own unique identifier. Every SimObject also has a list of tuples containing the output port numbers and the identifiers of the objects to which the inputs of the SimObject are connected, such a tuple is of the form (*object_identifier*, *output_port_number*). It will also have a list containing the boolean values of those outputs. Every SimObject also has a list of booleans representing the state of the outputs, these will be fetched by other SimObjects when needed. The Simulation class will hold a pool of pointers to all of the objects in the simulation, the Subsystem class will have its own internal pool. <br />
 
 #### Running the simulation
-When the simulation is run it starts by finding SimObjects which has no outputs connected, this will be Lamps in most cases. For these SimObjects the Simulation will make sure the input blocks are run and their inputs will be fetched, which means SimObjects connected to the inputs of these modules will be run if they haven't done so this iteration. This will start recursive calculation of all necessary SimObjects.
+When the simulation is run it starts by finding SimObjects which have no outputs connected, this will be Lamps in most cases. For every one of these SimObjects (call it s1) the Simulation will make sure that:<br />
+
+- The SimObject connected to every input (call it s2) is evaluated this iteration.
+- The corresponding output of the now evaluated SimObject s2 is copied to the corresponding input of the SimObject s1.
+
+This will start recursive calculation of all necessary SimObjects, leaving isolated blocks out of the calculation which improves performance.
 
 ---
 
@@ -36,6 +41,6 @@ When the simulation is run it starts by finding SimObjects which has no outputs 
 - *void* connect_input(_input_port_number, _source_id, _source_port_number): connects a specific input to an output port of another block.
 - *int* get_num_inputs(): returns the total number of inputs.
 - *int* get_num_outputs(): returns the total number of outputs.
-- *void* execute_logic(time): uses the set input_values to determine its output_values. This function must be overridden by subclasses.
+- *void* execute_logic(_time): uses the list of input values to determine its output values. This function must be overridden by subclasses.
 ## Other classes
 - Other classes inherit fields and functions from the SimObject class. They call the superconstructor with the number of inputs and outputs required and override the execute_logic() function.

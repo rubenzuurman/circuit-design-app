@@ -8,12 +8,12 @@ class SimObject:
 
 	def __init__(self, _num_inputs, _num_outputs):
 		"""
-		Initializes necessary fields.
+		Initializes object id, inputs and outputs.
 		"""
 		# Check parameter types.
-		err_msg_num_inputs = "SimObject.__init__(): Paremeter _num_inputs " \
-			"be a nonnegative integer."
-		err_msg_num_outputs = "SimObject.__init__(): Paremeter " \
+		err_msg_num_inputs = "SimObject.__init__(): Parameter " \
+			"_num_inputs be a nonnegative integer."
+		err_msg_num_outputs = "SimObject.__init__(): Parameter " \
 			"_num_outputs be a nonnegative integer."
 		assert isinstance(_num_inputs, int), err_msg_num_inputs
 		assert isinstance(_num_outputs, int), err_msg_num_outputs
@@ -64,18 +64,18 @@ class SimObject:
 
 	# Setters.
 	def set_evaluated(self, _evaluated):
-		"""Set evaluated boolean."""
+		"""Sets evaluated boolean."""
 		# Check parameter type.
 		err_msg_eval = "SimObject.set_evaluated(): Parameter _evaluated " \
 			"must be a boolean."
 		assert isinstance(_evaluated, bool), err_msg_eval
 
-		# Return evaluated boolean.
+		# Set evaluated boolean.
 		self.evaluated = _evaluated
 
 	def set_input_locations(self, _input_locations):
-		"""Set input locations list. It's generally better to set these one 
-		by one using the factory method set_input_location()."""
+		"""Sets input locations list. It's generally better to set these one 
+		by one using the method set_input_location()."""
 		# Check parameter type.
 		err_msg_inp_locs = "SimObject.set_input_locations(): Parameter " \
 			"_input_locations must be a list of tuples containing " \
@@ -86,7 +86,7 @@ class SimObject:
 			for entry2 in entry:
 				assert isinstance(entry2, int), err_msg_inp_locs
 
-		# Return input locations list.
+		# Set input locations list.
 		self.input_locations = _input_locations
 
 	def set_input_location(self, _input_port_number, _location):
@@ -110,7 +110,7 @@ class SimObject:
 		self.input_locations[_input_port_number] = _location
 
 	def set_input_values(self, _input_values):
-		"""Set input values list. Useful when testing a custom module for 
+		"""Sets input values list. Useful when testing a custom module for 
 		example."""
 		# Check parameter type.
 		err_msg_inp_vals = "SimObject.set_input_values(): Parameter " \
@@ -119,7 +119,7 @@ class SimObject:
 		for entry in _input_values:
 			assert isinstance(entry, bool), err_msg_inp_vals
 
-		# Return input values list.
+		# Set input values list.
 		self.input_values = _input_values
 
 	def set_input_value(self, _input_port_number, _value):
@@ -141,7 +141,7 @@ class SimObject:
 		self.input_values[_input_port_number] = _value
 
 	def set_output_values(self, _output_values):
-		"""Set output values list."""
+		"""Sets output values list."""
 		# Check parameter type.
 		err_msg_out_vals = "SimObject.set_output_values(): Parameter " \
 			"_output_values must be a list of booleans."
@@ -149,12 +149,12 @@ class SimObject:
 		for entry in _output_values:
 			assert isinstance(entry, bool), err_msg_out_vals
 
-		# Return output values list.
+		# Set output values list.
 		self.output_values = _output_values
 
 	# Other functions.
 	def add_input(self, _new_input_port_number):
-		"""Add extra input to the block at the specified place, using the 
+		"""Adds an extra input to the block at the specified place, using the 
 		specified port number, pushing ports after the new port down by 
 		one."""
 		# Check parameter type.
@@ -172,11 +172,15 @@ class SimObject:
 		val_list_right = self.get_input_values()[_new_input_port_number:]
 
 		# Join split lists using (-1, -1) and False respectively.
-		self.set_input_locations(loc_list_left + [(-1, -1)] + loc_list_right)
-		self.set_input_values(val_list_left + [False] + val_list_right)
+		new_loc_list = loc_list_left + [(-1, -1)] + loc_list_right
+		new_val_list = val_list_left + [False] + val_list_right
+
+		# Set input locations list and input values list equal to new lists.
+		self.set_input_locations(new_loc_list)
+		self.set_input_values(new_val_list)
 
 	def add_output(self, _new_output_port_number):
-		"""Add extra output to the block at the specified place, using the 
+		"""Adds an extra output to the block at the specified place, using the 
 		specified port number, pushing ports after the new port down by 
 		one."""
 		# Check parameter type.
@@ -190,7 +194,10 @@ class SimObject:
 		val_list_right = self.get_output_values()[_new_output_port_number:]
 
 		# Join split list using False.
-		self.set_output_values(val_list_left + [False] + val_list_right)
+		new_val_list = val_list_left + [False] + val_list_right
+
+		# Set output values list equal to new list.
+		self.set_output_values(new_val_list)
 
 	def connect_input(self, _input_port_number, _source_id, _source_port_number):
 		"""Creates a connection between the specified output port of the 
@@ -203,10 +210,9 @@ class SimObject:
 			"_input_port_number must be a nonnegative integer " \
 			"representing an input port of this object."
 		err_msg_src_id = "SimObject.connect_input(): Parameter " \
-			"_source_id must be a nonnegative identifier of an existing object."
+			"_source_id must be a nonnegative integer."
 		err_msg_src_port_num = "SimObject.connect_input(): Parameter " \
-			"_source_port_number must be a nonnegative integer " \
-			"representing an output port of the specified object."
+			"_source_port_number must be a nonnegative integer."
 		assert isinstance(_input_port_number, int), err_msg_inp_port_num
 		assert isinstance(_source_id, int), err_msg_src_id
 		assert isinstance(_source_port_number, int), err_msg_src_port_num
